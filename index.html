@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCloud Mobile Application</title>
+    <style>
+        /* Reset and Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Background Video */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(50%);
+        }
+
+        /* Glassmorphism Container */
+        .glass-effect {
+            backdrop-filter: blur(10px) saturate(150%);
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+            background: rgba(255, 500, 255, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+
+        .gridapp{
+            backdrop-filter: blur(10px) saturate(150%);
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0.5, 0.5, 0.5, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-effect:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Centered Container */
+        .container-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: #eeeeee;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #01104b;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .downloadtxt{
+
+            font-size: 1.2rem;
+            color: #444444;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #069f25;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .download-button:hover {
+            background: #00bd10;
+            transform: translateY(-3px);
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #000000;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(252, 252, 252, 0.6);
+            border-radius: 8px;
+            max-width: 500px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Video -->
+    <video class="background-video" autoplay muted loop>
+        <source src="https://cdn.pixabay.com/video/2024/04/16/208160_tiny.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        // Select the video element
+        const video = document.querySelector('.background-video');
+    
+        // Set the playback speed to 0.5 (50% of normal speed)
+        video.playbackRate = 0.7;
+    </script>
+
+    <!-- Content -->
+    <div class="container-wrapper">
+        <header>
+            <h1>EasyCloud WMS Mobile Application</h1>
+            <p>Download the latest APK for EasyCloud WMS apps below</p>
+        </header>
+
+        <div class="gridapp">
+            <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS Logo" class="logo">
+            <h3>EasyCloud WMS UAT</h3>
+            <p class="downloadtxt">Download the UAT APK file below</p>
+            <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download APK</a>
+        </div>
+
+        <p class="note">
+            Note: Installing the latest UAT APK will replace the existing version.<br>
+            Download the latest UAT APK for EasyCloud WMS. The existing APK will be uninstalled, and the newly downloaded APK will be installed.
+        </p>
+    </div>
+
+</body>
+</html>
