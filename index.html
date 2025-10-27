@@ -19,8 +19,8 @@
             --color-light-text: #ffffff;
             --color-download-text: #444444;
             --color-note-text: #000000;
-            --color-note-bg: rgba(252, 252, 252, 0.9); /* Increased opacity for better legibility */
-            --color-glass-bg: rgba(255, 255, 255, 0.15); /* Corrected green value to 255 for white/transparent base */
+            --color-note-bg: rgba(252, 252, 252, 0.9);
+            --color-glass-bg: rgba(255, 255, 255, 0.15);
             --color-grid-bg: white;
             --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.2);
             --shadow-heavy: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -36,7 +36,6 @@
 
         body, html {
             height: 100%;
-            /* Removed overflow: hidden to allow for potential scrolling on smaller screens if content requires it */
         }
 
         /* Background Video */
@@ -60,26 +59,40 @@
             padding: 2rem;
             box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* Added max-width for large screen control */
             max-width: 600px; 
-            width: 90%; /* Responsive width */
+            width: 90%;
+            margin-bottom: 1.5rem; /* Add space between header and download cards */
         }
 
         .glass-effect:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-heavy);
         }
+        
+        /* --- NEW: Container for multiple download cards --- */
+        .download-cards-wrapper {
+            display: flex; /* Enable Flexbox */
+            flex-direction: row; /* Default to row for desktop */
+            gap: 20px; /* Space between cards */
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 760px; /* Allow space for two 350px cards plus gap */
+            margin: 0 auto;
+        }
+        /* --- END NEW --- */
 
         /* Grid App Container (Download Box) */
         .gridapp {
             background: var(--color-grid-bg);
             border-radius: var(--radius-default);
             padding: 2rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Lighter shadow for inner box */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             transition: box-shadow 0.3s ease;
-            width: 100%; /* Take full width of its parent */
+            width: 100%;
             max-width: 350px; /* Constrain the inner box width */
-            margin: 1.5rem 0 1rem 0; /* Add margin around the box */
+            /* Removed margin: 1.5rem 0 1rem 0 to let the new parent wrapper manage spacing */
+            text-align: center; /* Ensure content is centered within the card */
         }
         
         /* Centered Container Wrapper */
@@ -92,10 +105,9 @@
             text-align: center;
             color: var(--color-light-text);
             z-index: 1;
-            /* Limit max width of content for better readability on desktop */
             max-width: 800px;
             margin: 0 auto;
-            padding: 1rem; /* Add padding for small screens */
+            padding: 1rem;
         }
 
         /* Typography */
@@ -109,17 +121,17 @@
         header p {
             font-size: 1.3rem;
             color: #eeeeee;
-            margin-bottom: 2rem;
+            margin-bottom: 0; /* Adjusted since the glass-effect margin handles spacing now */
         }
 
         .logo {
-            width: 120px;
+            width: 100px; /* Slightly reduced logo size for card */
             height: auto;
             margin-bottom: 1rem;
         }
 
         h3 {
-            font-size: 1.8rem;
+            font-size: 1.6rem; /* Slightly reduced heading for card */
             color: var(--color-dark-text);
             font-weight: 600;
             margin-bottom: 0.8rem;
@@ -133,9 +145,10 @@
         }
 
         .downloadtxt {
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* Slightly reduced download text size */
             color: var(--color-download-text);
             margin-bottom: 1.5rem;
+            min-height: 40px; /* Add min height to prevent content jump if text wraps differently */
         }
 
         /* Download Button */
@@ -149,6 +162,8 @@
             text-decoration: none;
             border-radius: var(--radius-small);
             transition: background 0.3s ease, transform 0.3s ease;
+            width: 100%; /* Make button full width in the card */
+            max-width: 250px; /* Constrain button width */
         }
 
         .download-button:hover {
@@ -166,7 +181,7 @@
             background: var(--color-note-bg);
             border-radius: var(--radius-small);
             max-width: 500px;
-            width: 90%; /* Responsive width for note */
+            width: 90%;
         }
 
         /* --- Responsiveness: Mobile First Adjustments --- */
@@ -181,12 +196,19 @@
             
             .glass-effect, .note {
                 padding: 1.5rem;
-                width: 95%; /* Make it wider on smaller screens */
+                width: 95%;
+            }
+            
+            /* Change download cards to stack vertically on smaller screens */
+            .download-cards-wrapper {
+                flex-direction: column; 
+                gap: 1.5rem;
             }
             
             .gridapp {
                 padding: 1.5rem;
-                max-width: 300px; /* Slightly smaller box on mobile */
+                max-width: 350px; /* Max width for consistency */
+                width: 90%; /* Responsive width for card */
             }
         }
         
@@ -194,9 +216,9 @@
              header h1 {
                 font-size: 1.7rem;
             }
+            /* Button is already full width with max-width, no need for display: block here */
             .download-button {
-                display: block;
-                width: 100%;
+                max-width: none; /* Let button stretch to 100% of card width on tiny screens */
             }
         }
         
@@ -221,21 +243,32 @@
     </script>
 
     <div class="container-wrapper">
-        <div class="glass-effect"> <header>
+        <div class="glass-effect">
+            <header>
                 <h1>EasyCloud WMS Mobile Application</h1>
                 <p>Download the latest APK for EasyCloud WMS apps below</p>
             </header>
         </div>
 
-        <div class="gridapp">
-            <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS UAT App Logo" class="logo">
-            <h3>EasyCloud WMS UAT</h3>
-            <p class="downloadtxt">Download the UAT APK file below</p>
-            <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download APK </a>
-        </div>
+        <div class="download-cards-wrapper">
+            
+            <div class="gridapp">
+                <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS UAT App Logo" class="logo">
+                <h3>EasyCloud WMS UAT</h3>
+                <p class="downloadtxt">Download the latest UAT APK file below.</p>
+                <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download UAT APK </a>
+            </div>
 
+            <div class="gridapp">
+                <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS Production App Logo" class="logo">
+                <h3>EasyCloud WMS PROD</h3>
+                <p class="downloadtxt">Download the stable Production APK file below.</p>
+                <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download PROD APK </a>
+            </div>
+
+        </div>
         <p class="note">
-            Note: Installing the latest UAT APK will replace the existing version.<br>
+            Note: Installing an APK will replace the existing version of that build.<br>
             Please ensure you have backed up any necessary local data before proceeding.
         </p>
     </div>
