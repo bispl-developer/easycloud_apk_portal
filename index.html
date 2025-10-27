@@ -3,19 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyCloud Mobile Application</title>
+    <title>EasyCloud Mobile Application Download</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    
     <style>
         /* Reset and Global Styles */
+        :root {
+            /* Define Inter as the primary font */
+            font-family: 'Inter', sans-serif;
+            /* Define color variables for easier theming/changes */
+            --color-primary: #069f25;
+            --color-primary-hover: #00bd10;
+            --color-dark-text: #01104b;
+            --color-light-text: #ffffff;
+            --color-download-text: #444444;
+            --color-note-text: #000000;
+            --color-note-bg: rgba(252, 252, 252, 0.9); /* Increased opacity for better legibility */
+            --color-glass-bg: rgba(255, 255, 255, 0.15); /* Corrected green value to 255 for white/transparent base */
+            --color-grid-bg: white;
+            --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.2);
+            --shadow-heavy: 0 8px 20px rgba(0, 0, 0, 0.4);
+            --radius-default: 20px;
+            --radius-small: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
         }
 
         body, html {
             height: 100%;
-            overflow: hidden;
+            /* Removed overflow: hidden to allow for potential scrolling on smaller screens if content requires it */
         }
 
         /* Background Video */
@@ -30,34 +51,38 @@
             filter: brightness(50%);
         }
 
-        /* Glassmorphism Container */
+        /* Glassmorphism Container (Main Header Area) */
         .glass-effect {
             backdrop-filter: blur(10px) saturate(150%);
             -webkit-backdrop-filter: blur(10px) saturate(150%);
-            background: rgba(255, 500, 255, 0.15);
-            border-radius: 20px;
+            background: var(--color-glass-bg);
+            border-radius: var(--radius-default);
             padding: 2rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-
-        .gridapp{
-            backdrop-filter: blur(10px) saturate(150%);
-            -webkit-backdrop-filter: blur(10px) saturate(150%);
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 10px rgba(0.5, 0.5, 0.5, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Added max-width for large screen control */
+            max-width: 600px; 
+            width: 90%; /* Responsive width */
         }
 
         .glass-effect:hover {
             transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-heavy);
         }
 
-        /* Centered Container */
+        /* Grid App Container (Download Box) */
+        .gridapp {
+            background: var(--color-grid-bg);
+            border-radius: var(--radius-default);
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Lighter shadow for inner box */
+            transition: box-shadow 0.3s ease;
+            width: 100%; /* Take full width of its parent */
+            max-width: 350px; /* Constrain the inner box width */
+            margin: 1.5rem 0 1rem 0; /* Add margin around the box */
+        }
+        
+        /* Centered Container Wrapper */
         .container-wrapper {
             display: flex;
             flex-direction: column;
@@ -65,13 +90,18 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
-            color: #fff;
+            color: var(--color-light-text);
             z-index: 1;
+            /* Limit max width of content for better readability on desktop */
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem; /* Add padding for small screens */
         }
 
+        /* Typography */
         header h1 {
             font-size: 2.5rem;
-            color: #ffffff;
+            color: var(--color-light-text);
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
@@ -90,63 +120,91 @@
 
         h3 {
             font-size: 1.8rem;
-            color: #01104b;
+            color: var(--color-dark-text);
             font-weight: 600;
             margin-bottom: 0.8rem;
         }
-
+        
+        /* General content paragraph (used for header text) */
         p {
             font-size: 1.2rem;
-            color: #f0f0f0;
+            color: #f0f0f0; 
             margin-bottom: 1.5rem;
         }
 
-        .downloadtxt{
-
+        .downloadtxt {
             font-size: 1.2rem;
-            color: #444444;
+            color: var(--color-download-text);
             margin-bottom: 1.5rem;
         }
 
+        /* Download Button */
         .download-button {
             display: inline-block;
             padding: 0.8rem 1.5rem;
-            background: #069f25;
-            color: #ffffff;
+            background: var(--color-primary);
+            color: var(--color-light-text);
             font-size: 1rem;
             font-weight: 600;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: var(--radius-small);
             transition: background 0.3s ease, transform 0.3s ease;
         }
 
         .download-button:hover {
-            background: #00bd10;
+            background: var(--color-primary-hover);
             transform: translateY(-3px);
         }
 
+        /* Note Section */
         .note {
             font-size: 0.9rem;
-            color: #000000;
+            color: var(--color-note-text);
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 2rem;
             padding: 1rem;
-            background: rgba(252, 252, 252, 0.6);
-            border-radius: 8px;
+            background: var(--color-note-bg);
+            border-radius: var(--radius-small);
             max-width: 500px;
+            width: 90%; /* Responsive width for note */
         }
 
+        /* --- Responsiveness: Mobile First Adjustments --- */
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2rem;
             }
+
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .glass-effect, .note {
+                padding: 1.5rem;
+                width: 95%; /* Make it wider on smaller screens */
+            }
+            
+            .gridapp {
+                padding: 1.5rem;
+                max-width: 300px; /* Slightly smaller box on mobile */
+            }
         }
+        
+        @media (max-width: 480px) {
+             header h1 {
+                font-size: 1.7rem;
+            }
+            .download-button {
+                display: block;
+                width: 100%;
+            }
+        }
+        
     </style>
 </head>
 <body>
 
-    <!-- Background Video -->
-    <video class="background-video" autoplay muted loop>
+    <video class="background-video" autoplay muted loop playsinline>
         <source src="https://cdn.pixabay.com/video/2024/04/16/208160_tiny.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -155,27 +213,30 @@
         // Select the video element
         const video = document.querySelector('.background-video');
     
-        // Set the playback speed to 0.5 (50% of normal speed)
-        video.playbackRate = 0.7;
+        // Set the playback speed to 0.7 (70% of normal speed)
+        // Check if video is loaded before setting playbackRate
+        video.onloadeddata = () => {
+             video.playbackRate = 0.7;
+        };
     </script>
 
-    <!-- Content -->
     <div class="container-wrapper">
-        <header>
-            <h1>EasyCloud WMS Mobile Application</h1>
-            <p>Download the latest APK for EasyCloud WMS apps below</p>
-        </header>
+        <div class="glass-effect"> <header>
+                <h1>EasyCloud WMS Mobile Application</h1>
+                <p>Download the latest APK for EasyCloud WMS apps below</p>
+            </header>
+        </div>
 
         <div class="gridapp">
-            <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS Logo" class="logo">
+            <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS UAT App Logo" class="logo">
             <h3>EasyCloud WMS UAT</h3>
             <p class="downloadtxt">Download the UAT APK file below</p>
-            <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download APK</a>
+            <a href="download/EasyCloudWMS_UAT.apk" class="download-button">Download APK </a>
         </div>
 
         <p class="note">
             Note: Installing the latest UAT APK will replace the existing version.<br>
-            Download the latest UAT APK for EasyCloud WMS. The existing APK will be uninstalled, and the newly downloaded APK will be installed.
+            Please ensure you have backed up any necessary local data before proceeding.
         </p>
     </div>
 
