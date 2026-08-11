@@ -1,282 +1,882 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasyCloud WMS Apps | Portal</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
     <style>
         :root {
-            --brand: #00a651;
-            --brand-hover: #008d44;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --brand: #01875f;
+            --brand-hover: #016b4c;
+            --brand-soft: rgba(1, 135, 95, 0.12);
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --surface-2: #f1f3f4;
+            --text: #202124;
+            --text-secondary: #5f6368;
+            --border: #e8eaed;
+            --shadow: 0 1px 2px rgba(60, 64, 67, 0.08), 0 2px 8px rgba(60, 64, 67, 0.1);
+            --shadow-hover: 0 4px 12px rgba(60, 64, 67, 0.14);
+            --nav-height: 64px;
+            --radius: 16px;
+            --radius-sm: 12px;
+            --icon-radius: 22%;
         }
+
+        [data-theme="dark"] {
+            --brand: #34a853;
+            --brand-hover: #2d9248;
+            --brand-soft: rgba(52, 168, 83, 0.18);
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --surface-2: #2a2a2a;
+            --text: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --border: #3c4043;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.45);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Dark Mode Colors */
-        body.dark-mode {
-            background-color: #0f172a;
-            color: #fffff;
-            --glass-bg: rgba(30, 41, 59, 0.8);
-            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        a { color: inherit; text-decoration: none; }
+
+        /* ——— Top nav (Play Store style) ——— */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--nav-height);
+            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 16px;
         }
 
-        .background-video {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: -1;
-            filter: brightness(0.6) saturate(1.2);
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
-        /* Modern Header */
-        .header-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        .brand img {
+            height: 32px;
+            width: auto;
+            max-width: 140px;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+        }
+
+        .brand-name span { color: var(--brand); }
+
+        .search-wrap {
+            flex: 1;
+            max-width: 640px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 44px;
+            border: none;
+            border-radius: 999px;
+            background: var(--surface-2);
+            color: var(--text);
+            padding: 0 18px 0 44px;
+            font: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: box-shadow 0.2s, background 0.2s;
+        }
+
+        .search-input::placeholder { color: var(--text-secondary); }
+
+        .search-input:focus {
+            background: var(--surface);
+            box-shadow: 0 0 0 2px var(--brand-soft), var(--shadow);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+
+        .icon-btn:focus-visible {
+            outline: 2px solid var(--brand);
+            outline-offset: 2px;
+        }
+
+        /* ——— Layout ——— */
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px 64px;
+        }
+
+        /* ——— Featured banner ——— */
+        .featured {
+            position: relative;
             border-radius: 24px;
-            padding: 3rem 1.5rem;
-            margin-bottom: 3rem;
-            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            min-height: 200px;
+            background:
+                radial-gradient(ellipse 80% 120% at 10% 20%, rgba(1, 135, 95, 0.35), transparent 55%),
+                radial-gradient(ellipse 60% 80% at 90% 80%, rgba(1, 135, 95, 0.18), transparent 50%),
+                linear-gradient(135deg, #0d3d2e 0%, #1a5c44 45%, #0f2920 100%);
+            color: #fff;
+            padding: 36px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 36px;
+            animation: fadeUp 0.55s ease both;
         }
 
-        /* App Cards */
-        .app-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100%;
-            box-shadow: var(--card-shadow);
+        [data-theme="dark"] .featured {
+            background:
+                radial-gradient(ellipse 80% 120% at 10% 20%, rgba(52, 168, 83, 0.28), transparent 55%),
+                radial-gradient(ellipse 60% 80% at 90% 80%, rgba(52, 168, 83, 0.12), transparent 50%),
+                linear-gradient(135deg, #0a1f18 0%, #123528 45%, #0b1612 100%);
         }
+
+        .featured-copy h1 {
+            margin: 0 0 8px;
+            font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+
+        .featured-copy p {
+            margin: 0 0 20px;
+            opacity: 0.88;
+            max-width: 420px;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .featured-art {
+            flex-shrink: 0;
+            width: min(180px, 28vw);
+            aspect-ratio: 1;
+            border-radius: 28%;
+            background: rgba(255, 255, 255, 0.12);
+            display: grid;
+            place-items: center;
+            backdrop-filter: blur(8px);
+            animation: floatIcon 4s ease-in-out infinite;
+        }
+
+        .featured-art img {
+            width: 62%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+        }
+
+        .btn-guide {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            color: #0d3d2e;
+            border: none;
+            border-radius: 999px;
+            padding: 11px 22px;
+            font: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-guide:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ——— Section ——— */
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+            animation: fadeUp 0.55s ease 0.08s both;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .section-head .count {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ——— App grid (Play Store cards) ——— */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .app-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: var(--shadow);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+            animation: fadeUp 0.5s ease both;
+            cursor: default;
+        }
+
+        .app-card:nth-child(1) { animation-delay: 0.12s; }
+        .app-card:nth-child(2) { animation-delay: 0.18s; }
+        .app-card:nth-child(3) { animation-delay: 0.24s; }
+        .app-card:nth-child(4) { animation-delay: 0.3s; }
 
         .app-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
         }
 
-        .logo-container {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 18px;
+        .app-card.is-hidden { display: none; }
+
+        .app-top {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+            border-radius: var(--icon-radius);
+            background: var(--surface-2);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
             padding: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .logo-img { width: 100%; height: auto; object-fit: contain; }
-
-		.logo-imghead { width: 250px; }
-
-        /* Version Badge */
-        .version-badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 50px;
-            background: rgba(0, 166, 81, 0.15);
-            color: var(--brand);
-            display: inline-block;
-        }
-
-        /* Action Buttons */
-        .btn-download {
-            background-color: var(--brand);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
+        .app-icon img {
             width: 100%;
-            transition: 0.2s;
+            height: 100%;
+            object-fit: contain;
         }
 
-        .btn-download:hover {
-            background-color: var(--brand-hover);
-            color: white;
-            box-shadow: 0 0 15px rgba(0, 166, 81, 0.4);
+        .app-meta { min-width: 0; flex: 1; }
+
+        .app-meta h3 {
+            margin: 0 0 4px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
         }
 
-        .theme-toggle {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            z-index: 1000;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+        .app-meta .developer {
+            margin: 0 0 8px;
+            color: var(--brand);
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .chips {
             display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--surface-2);
+            color: var(--text-secondary);
+        }
+
+        .chip.version {
+            background: var(--brand-soft);
+            color: var(--brand);
+        }
+
+        .app-desc {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .app-actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-install {
+            width: 100%;
+            height: 44px;
+            border: none;
+            border-radius: 999px;
+            background: var(--brand);
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
-            background: var(--glass-bg);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: var(--card-shadow);
+            gap: 8px;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-install:hover:not(:disabled) {
+            background: var(--brand-hover);
+        }
+
+        .btn-install:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-install:disabled {
+            opacity: 0.85;
+            cursor: wait;
+        }
+
+        .btn-install.is-done {
+            background: var(--surface-2);
+            color: var(--brand);
         }
 
         .progress {
-            height: 8px;
-            border-radius: 10px;
-            background-color: rgba(0,0,0,0.05);
+            height: 6px;
+            border-radius: 999px;
+            background: var(--surface-2);
+            overflow: hidden;
             display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--brand);
+            border-radius: inherit;
+            transition: width 0.2s ease;
+        }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state.visible { display: block; }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+            opacity: 0.5;
+        }
+
+        /* ——— Modal ——— */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s, visibility 0.25s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-panel {
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 20px;
+            width: min(440px, 100%);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+            transform: translateY(12px) scale(0.98);
+            transition: transform 0.25s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay.open .modal-panel {
+            transform: none;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .modal-body { padding: 20px; }
+
+        .step {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .step:last-child { margin-bottom: 0; }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--brand-soft);
+            color: var(--brand);
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .step strong { display: block; margin-bottom: 2px; }
+
+        .step p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 8px 20px 40px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ——— Responsive ——— */
+        @media (max-width: 768px) {
+            .topbar {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 12px 14px;
+                gap: 10px;
+            }
+
+            .brand-name { display: none; }
+
+            .search-wrap {
+                order: 3;
+                flex: 1 1 100%;
+                max-width: none;
+            }
+
+            .featured {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 28px 22px;
+                min-height: auto;
+            }
+
+            .featured-art {
+                display: none;
+            }
+
+            .page { padding: 16px 14px 48px; }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Compact list row on small phones */
+            .app-card {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .app-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .app-meta h3 { font-size: 0.98rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
+    <header class="topbar">
+        <a class="brand" href="./">
+            <img src="logo/bispl.png" alt="BISPL" onerror="this.style.display='none'">
+            <div class="brand-name">EasyCloud <span>Apps</span></div>
+        </a>
 
-    <video class="background-video" autoplay muted loop playsinline>
-        <source src="https://cdn.pixabay.com/video/2024/04/16/208160_tiny.mp4" type="video/mp4">
-    </video>
-
-
-
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="header-section text-center">
-                 
-                        <img src="logo/bispl.png" class="logo-img logo-imghead" >
-                    
-                    <h1 class="display-5 fw-bold">EasyCloud WMS App's Portal</h1>
-                    <p class="lead opacity-75">Securely download and manage internal mobile solutions</p>
-                    <button class="btn btn-outline-success rounded-pill px-4 mt-3" data-bs-toggle="modal" data-bs-target="#installGuide">
-                        <i class="bi bi-info-circle me-2"></i> Installation Guide
-                    </button>
-                </div>
-            </div>
+        <div class="search-wrap">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <input
+                type="search"
+                class="search-input"
+                id="searchInput"
+                placeholder="Search apps"
+                aria-label="Search apps"
+                autocomplete="off"
+            >
         </div>
 
-        <div class="row g-4">
-            <div class="col-xl-3 col-md-6">
-                <div class="card app-card p-4 text-center">
-                    <div class="logo-container">
-                        <img src="logo/esaycloudwmslogo.png" class="logo-img">
+        <div class="nav-actions">
+            <button
+                type="button"
+                class="icon-btn"
+                id="themeBtn"
+                aria-label="Toggle dark mode"
+                title="Toggle theme"
+            >
+                <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+            </button>
+            <button
+                type="button"
+                class="icon-btn"
+                id="guideBtn"
+                aria-label="Installation guide"
+                title="Installation guide"
+            >
+                <i class="bi bi-question-circle"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="featured" aria-label="Featured">
+            <div class="featured-copy">
+                <h1>EasyCloud WMS App Portal</h1>
+                <p>Securely download and install internal warehouse &amp; automation apps for your devices.</p>
+                <button type="button" class="btn-guide" id="guideBtnFeatured">
+                    <i class="bi bi-info-circle"></i>
+                    Installation guide
+                </button>
+            </div>
+            <div class="featured-art" aria-hidden="true">
+                <img src="logo/esaycloudwmslogo.png" alt="" onerror="this.parentElement.style.display='none'">
+            </div>
+        </section>
+
+        <div class="section-head">
+            <h2>Available apps</h2>
+            <span class="count" id="appCount">3 apps</span>
+        </div>
+
+        <div class="apps-grid" id="appsGrid">
+            <article class="app-card" data-name="easycloud wms uat" data-tags="wms uat warehouse">
+                <div class="app-top">
+                    <div class="app-icon">
+                        <img src="logo/esaycloudwmslogo.png" alt="EasyCloud WMS UAT">
                     </div>
-                    <h5 class="fw-bold mb-1">EasyCloud WMS UAT</h5>
-                    <div class="mb-3"><span class="version-badge">v1.7.7</span></div>
-					 <div class="mb-3"><span class="version-badge">22 July 2026</span></div>
-                    <p class="text-muted small mb-4"><i class="bi bi-hdd me-1"></i> 8 MB</p>
-                    
-                    <button class="btn btn-download" onclick="simulateDownload(this, 'download/EasyCloudWMS_UAT.apk')">
-                        <i class="bi bi-cloud-arrow-down-fill me-2"></i> Download APK
-                    </button>
-                    <div class="progress mt-3">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"></div>
+                    <div class="app-meta">
+                        <h3>EasyCloud WMS UAT</h3>
+                        <p class="developer">EasyCloud</p>
+                        <div class="chips">
+                            <span class="chip version">v1.7.7</span>
+                            <span class="chip"><i class="bi bi-calendar3"></i> 22 Jul 2026</span>
+                            <span class="chip"><i class="bi bi-hdd"></i> 8 MB</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-			 <div class="col-xl-3 col-md-6">
-                <div class="card app-card p-4 text-center">
-                    <div class="logo-container">
-                        <img src="logo/esaycloudwmslogo.png" class="logo-img">
-                    </div>
-                    <h5 class="fw-bold mb-1">WMS Sobha Modular</h5>
-                    <div class="mb-3"><span class="version-badge">v1.0.8</span></div>
-					 <div class="mb-3"><span class="version-badge">06 Aug 2026</span></div>
-                    <p class="text-muted small mb-4"><i class="bi bi-hdd me-1"></i> 8 MB</p>
-                    
-                    <button class="btn btn-download" onclick="simulateDownload(this, 'download/WMS_SobhaModular_Dev.apk')">
-                        <i class="bi bi-cloud-arrow-down-fill me-2"></i> Download APK
+                <p class="app-desc">UAT build of EasyCloud Warehouse Management System for testing and staging environments.</p>
+                <div class="app-actions">
+                    <button type="button" class="btn-install" onclick="simulateDownload(this, 'download/EasyCloudWMS_UAT.apk')">
+                        Install
                     </button>
-                    <div class="progress mt-3">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"></div>
+                    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar"></div>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card app-card p-4 text-center">
-                    <div class="logo-container">
-                        <img src="logo/ic_logo_bisplfas.png" class="logo-img">
+            <article class="app-card" data-name="wms sobha modular" data-tags="wms sobha modular warehouse">
+                <div class="app-top">
+                    <div class="app-icon">
+                        <img src="logo/esaycloudwmslogo.png" alt="WMS Sobha Modular">
                     </div>
-                    <h5 class="fw-bold mb-1">Outbound Automation</h5>
-                    <div class="mb-3"><span class="version-badge">v1.3</span></div>
-                    <p class="text-muted small mb-4"><i class="bi bi-hdd me-1"></i> 13 MB</p>
-                    
-                    <button class="btn btn-download" onclick="simulateDownload(this, 'download/ZeptoOutboundAutomation.apk')">
-                        <i class="bi bi-cloud-arrow-down-fill me-2"></i> Download APK
-                    </button>
-                    <div class="progress mt-3">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"></div>
+                    <div class="app-meta">
+                        <h3>WMS Sobha Modular</h3>
+                        <p class="developer">EasyCloud</p>
+                        <div class="chips">
+                            <span class="chip version">v1.0.8</span>
+                            <span class="chip"><i class="bi bi-calendar3"></i> 06 Aug 2026</span>
+                            <span class="chip"><i class="bi bi-hdd"></i> 8 MB</span>
+                        </div>
                     </div>
                 </div>
+                <p class="app-desc">Sobha Modular warehouse management client for on-site operations and inventory workflows.</p>
+                <div class="app-actions">
+                    <button type="button" class="btn-install" onclick="simulateDownload(this, 'download/WMS_SobhaModular_Dev.apk')">
+                        Install
+                    </button>
+                    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="app-card" data-name="outbound automation" data-tags="outbound automation zepto">
+                <div class="app-top">
+                    <div class="app-icon">
+                        <img src="logo/ic_logo_bisplfas.png" alt="Outbound Automation">
+                    </div>
+                    <div class="app-meta">
+                        <h3>Outbound Automation</h3>
+                        <p class="developer">BISPL</p>
+                        <div class="chips">
+                            <span class="chip version">v1.3</span>
+                            <span class="chip"><i class="bi bi-hdd"></i> 13 MB</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="app-desc">Outbound automation toolkit for streamlining dispatch and fulfilment operations.</p>
+                <div class="app-actions">
+                    <button type="button" class="btn-install" onclick="simulateDownload(this, 'download/ZeptoOutboundAutomation.apk')">
+                        Install
+                    </button>
+                    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </article>
+
+            <div class="empty-state" id="emptyState">
+                <i class="bi bi-search"></i>
+                <strong>No apps found</strong>
+                <p>Try a different search term.</p>
             </div>
+        </div>
+    </main>
 
+    <footer class="footer">
+        &copy; EasyCloud WMS · Internal app distribution
+    </footer>
 
-
-    
-			
-		
+    <div class="modal-overlay" id="installGuide" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+        <div class="modal-panel">
+            <div class="modal-head">
+                <h3 id="guideTitle">Installation guide</h3>
+                <button type="button" class="icon-btn" id="closeGuide" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <strong>Download</strong>
+                        <p>Tap Install and wait until the APK finishes downloading.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <strong>Allow installs</strong>
+                        <p>Enable “Install unknown apps” for your browser in Android settings.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <strong>Install</strong>
+                        <p>Open the APK file and follow the on-screen prompts.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="installGuide" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title fw-bold">Installation Guide</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="d-flex mb-3">
-                        <div class="me-3"><i class="bi bi-1-circle-fill text-success fs-4"></i></div>
-                        <div><strong>Download:</strong> Tap the download button and wait for completion.</div>
-                    </div>
-                    <div class="d-flex mb-3">
-                        <div class="me-3"><i class="bi bi-2-circle-fill text-success fs-4"></i></div>
-                        <div><strong>Security:</strong> Allow "Install from Unknown Sources" in your Android settings.</div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="me-3"><i class="bi bi-3-circle-fill text-success fs-4"></i></div>
-                        <div><strong>Execute:</strong> Open the APK file and follow the on-screen prompts.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.getElementById('themeBtn');
-            body.classList.toggle("dark-mode");
-            
-            if(body.classList.contains("dark-mode")) {
-                btn.innerHTML = '<i class="bi bi-sun-fill"></i>';
-                btn.classList.replace('btn-light', 'btn-dark');
-            } else {
-                btn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
-                btn.classList.replace('btn-dark', 'btn-light');
+        (function () {
+            const root = document.documentElement;
+            const themeBtn = document.getElementById("themeBtn");
+            const themeIcon = document.getElementById("themeIcon");
+            const searchInput = document.getElementById("searchInput");
+            const cards = Array.from(document.querySelectorAll(".app-card"));
+            const emptyState = document.getElementById("emptyState");
+            const appCount = document.getElementById("appCount");
+            const modal = document.getElementById("installGuide");
+
+            function applyTheme(theme) {
+                root.setAttribute("data-theme", theme);
+                localStorage.setItem("apk-portal-theme", theme);
+                const isDark = theme === "dark";
+                themeIcon.className = isDark ? "bi bi-sun-fill" : "bi bi-moon-stars-fill";
+                themeBtn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
             }
-        }
+
+            const saved = localStorage.getItem("apk-portal-theme");
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(saved || (prefersDark ? "dark" : "light"));
+
+            themeBtn.addEventListener("click", () => {
+                const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+                applyTheme(next);
+            });
+
+            function filterApps() {
+                const q = searchInput.value.trim().toLowerCase();
+                let visible = 0;
+                cards.forEach((card) => {
+                    const hay = (card.dataset.name + " " + card.dataset.tags).toLowerCase();
+                    const match = !q || hay.includes(q);
+                    card.classList.toggle("is-hidden", !match);
+                    if (match) visible += 1;
+                });
+                emptyState.classList.toggle("visible", visible === 0);
+                appCount.textContent = visible + (visible === 1 ? " app" : " apps");
+            }
+
+            searchInput.addEventListener("input", filterApps);
+
+            function openGuide() {
+                modal.classList.add("open");
+                document.body.style.overflow = "hidden";
+            }
+
+            function closeGuide() {
+                modal.classList.remove("open");
+                document.body.style.overflow = "";
+            }
+
+            document.getElementById("guideBtn").addEventListener("click", openGuide);
+            document.getElementById("guideBtnFeatured").addEventListener("click", openGuide);
+            document.getElementById("closeGuide").addEventListener("click", closeGuide);
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) closeGuide();
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && modal.classList.contains("open")) closeGuide();
+            });
+        })();
 
         function simulateDownload(btn, url) {
-            const card = btn.closest('.app-card');
-            const progressBar = card.querySelector('.progress');
-            const bar = card.querySelector('.progress-bar');
-            
+            const card = btn.closest(".app-card");
+            const progress = card.querySelector(".progress");
+            const bar = card.querySelector(".progress-bar");
+
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connecting...';
-            progressBar.style.display = 'flex';
+            btn.innerHTML = '<span class="spinner"></span> Downloading…';
+            progress.style.display = "block";
 
             let width = 0;
             const interval = setInterval(() => {
@@ -284,12 +884,18 @@
                 if (width >= 100) {
                     width = 100;
                     clearInterval(interval);
-                    btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i> Ready';
-                    btn.classList.replace('btn-download', 'btn-success');
-                    setTimeout(() => { window.location.href = url; }, 800);
+                    bar.style.width = "100%";
+                    progress.setAttribute("aria-valuenow", "100");
+                    btn.classList.add("is-done");
+                    btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ready';
+                    setTimeout(() => {
+                        window.location.href = url;
+                    }, 700);
+                } else {
+                    bar.style.width = width + "%";
+                    progress.setAttribute("aria-valuenow", String(width));
                 }
-                bar.style.width = width + '%';
-            }, 200);
+            }, 180);
         }
     </script>
 </body>
